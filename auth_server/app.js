@@ -22,7 +22,7 @@ mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true})
   .then((result) => {
     console.log('Mongo connected ...');
     console.log(result.connection._connectionString)    
-    app.listen(3000, () => console.log(`Listening to port ${3000}`))
+    app.listen(4000, () => console.log(`Listening to port ${4000}`))
   })
   .catch((err) => console.log(err));
 

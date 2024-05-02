@@ -50,11 +50,10 @@ module.exports.signup_post = async (request, response) => {
   try {
     const user = await User.create({ email, password });
     const token = createToken(user._id, email);
-    response.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
-    response.status(201).json({ user: user._id });
+    //response.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+    response.status(201).json({ user: user._id, jwt: token });
   }
   catch(err) {
-    res.cookie('jwt', '', { maxAge: 1 });
     const errors = handleErrors(err);
     response.status(400).json({ errors });
   }
@@ -67,8 +66,8 @@ module.exports.login_post = async (req, res) => {
   try {
     const user = await User.login(email, password);
     const token = createToken(user._id, email);
-    res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
-    res.status(200).json({ user: user._id });
+    //res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+    res.status(200).json({ user: user._id, jwt: token });
   } 
   catch (err) {
     res.cookie('jwt', '', { maxAge: 1 });
@@ -78,12 +77,15 @@ module.exports.login_post = async (req, res) => {
 }
 
 module.exports.logout_get = (req, res) => {
-  res.cookie('jwt', '', { maxAge: 1 });
+  // do we need logout ?
+  //res.cookie('jwt', '', { maxAge: 1 });
   res.status(200).json({ status: "logged out"});
 }
 
-module.exports.get_protected_data = (req, res) => {
-    const token = req.cookies.jwt;
+module.exports.validate_token = (req, res) => {
+    //const token = req.cookies.jwt;
+    const token = req.headers.authorization.split(' ')[1]
+    
     if (!token) {
         console.log('401');
         res.status(401).json({"status": "no jwt present"})
@@ -100,7 +102,11 @@ module.exports.get_protected_data = (req, res) => {
             // check if this user is still in the db
           let user = await User.findById(decodedToken.id);
           console.log('200');
-          res.status(200).json({ status: "protected data achieved"});
+          
+          // you can check token expiration here
+          // ...
+
+          res.status(200).json({ status: "token valid", id: user.id, email: user.email});
           return;
         }
       });

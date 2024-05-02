@@ -8,6 +8,6 @@ router.post('/login', authController.login_post);
 
 router.get('/logout', authController.logout_get);
 
-router.get('/data', authController.get_protected_data);
+router.get('/data', authController.validate_token);
 
 module.exports = router;
