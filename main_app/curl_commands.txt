@@ -1,0 +1,1 @@
+curl -X PUT -H "Content-Type: application/json" -d '{"id":1,"name":"Arya Stark","age":18,"email":"arya.stark@example.com","city":"Winterfell"}' localhost:8089/api/students/1

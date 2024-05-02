@@ -1,0 +1,12 @@
+{
+    "server": {
+        "port": 3000
+    },
+    "db_connection": {
+        "host": "localhost",
+        "user": "postgres",
+        "password": "admin",
+        "database": "postgres"
+    }
+}
+
